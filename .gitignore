@@ -49,7 +49,6 @@ doc/report/figure/*
 *.aux
 *.log
 *.out
-*.pdf
 *.gz
 
 # Test & data
