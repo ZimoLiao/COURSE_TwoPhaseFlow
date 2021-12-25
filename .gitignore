@@ -30,3 +30,28 @@
 *.exe
 *.out
 *.app
+
+# Debug
+src/x64/*
+src/.vs/*
+src/Debug/*
+
+# Output
+src/output/*
+*.plt
+*.dat
+*.txt
+*.png
+*.jpg
+
+# Documents (LaTeX)
+doc/report/figure/*
+*.aux
+*.log
+*.out
+*.pdf
+*.gz
+
+# Test & data
+test/*
+data/*
