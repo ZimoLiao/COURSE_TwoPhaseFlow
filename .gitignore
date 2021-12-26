@@ -48,6 +48,7 @@ src/output/*
 doc/report/figure/*
 *.aux
 *.log
+*.toc
 *.out
 *.gz
 *.pdf
