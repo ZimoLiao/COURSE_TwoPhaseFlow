@@ -50,6 +50,7 @@ doc/report/figure/*
 *.log
 *.out
 *.gz
+*.pdf
 
 # Test & data
 test/*
