@@ -1,0 +1,116 @@
+\documentclass[10pt]{article}
+\usepackage{xeCJK}
+\usepackage{geometry}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{subfigure}
+\usepackage{datetime}
+\usepackage{fontspec}
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+
+% global style
+\geometry{b5paper,left=0.6in,right=0.6in,top=1in,bottom=0.8in}
+\linespread{1.2}
+\setlength{\parindent}{2em}
+
+\renewcommand{\today}{\small \number\year 年 \number\month 月 \number\day 日}
+\renewcommand{\abstractname}{\normalsize 摘要}
+\renewcommand{\contentsname}{目录}
+\renewcommand{\refname}{参考文献}
+\renewcommand{\sectionmark}[1]{\markright{第\,\thesection\,章\, #1}}
+
+% title style
+\titleformat*{\section}{\Large\bfseries}
+\titleformat*{\subsection}{\large\bfseries}
+\titleformat*{\subsubsection}{\normalsize\bfseries}
+
+% font style
+\setCJKmainfont{SimSun}[BoldFont=SimHei, ItalicFont=KaiTi]
+\setmainfont{Times New Roman}[BoldFont=Arial]
+
+% page style
+\fancypagestyle{assignment-title}{
+    \fancyhf{}
+    \fancyhead[L]{\small 廖紫默 (SA21005043)}
+    \fancyhead[C]{\small \textbf{多相流大作业}}
+    \fancyhead[R]{\small 封面}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.4pt}
+}
+\fancypagestyle{assignment}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+    \fancyhead[L]{\small 廖紫默 (SA21005043)}
+    \fancyhead[C]{\small \textbf{多相流大作业}}
+    \fancyhead[R]{\small \bfseries\rightmark}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.4pt}
+}
+\pagestyle{assignment}
+
+
+
+% header
+\title{\LARGE\textbf{多相流大作业报告}}
+\author{廖紫默 (SA21005043)\\
+\small 近代力学系，中国科学技术大学\\
+\small \href{mailto:zimoliao@mail.ustc.edu.cn}{zimoliao@mail.ustc.edu.cn}}
+\date{\today}
+
+\begin{document}
+
+% titlepage
+\maketitle
+\thispagestyle{assignment-title}
+\pagenumbering{roman}
+\begin{abstract}
+    \normalsize\it 一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要一无是处的摘要
+\end{abstract}
+
+\tableofcontents
+% titlepage end
+
+
+%part 1
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section{引言}
+
+
+% part 2
+\newpage
+\section{Level Set方法}
+\subsection{基本思想}
+\textbf{ancyhdr} \textit{宏包niubi}\textbf{改善了页眉页脚样式为Arial}的定义方式，允许我们将内容自由安置在页眉和页脚的
+左、中、右三个位置，还为页眉和页脚各加了一条横线。
+fancyhdr 自定义了样式名称 fancy。使用 fancyhdr 宏包定义页眉页脚之前，通常先用  调用这个样式。在 fancyhdr 中定义页眉页脚的命令为
+
+\subsection{符号距离函数}
+首先我们定义（欧式）距离函数（distance function）：
+\begin{equation}
+    d(\bm{x})=\min\left(\left|\bm{x}-\bm{x}_I\right|\right)\quad\text{for all}\quad \bm{x}_I\in\partial\Omega
+\end{equation}
+显然$d(\bm{x})\geq0$，且其梯度的模在除某些奇异点外均为$1$，具有很好的光滑性：
+\begin{eqnarray}
+    \left|\nabla d\right| &=& \sqrt{\left[\frac{\partial}{\partial x_i}\sqrt{\left(x_l-x_{I,l}\right)\left(x_l-x_{I,l}\right)}\right]\left[\frac{\partial}{\partial x_i}\sqrt{\left(x_l-x_{I,l}\right)\left(x_l-x_{I,l}\right)}\right]}\notag\\
+    &=&\sqrt{\frac{1}{2}\frac{2\left(x_i-x_{I,i}\right)}{\sqrt{\left(x_l-x_{I,l}\right)\left(x_l-x_{I,l}\right)}}\cdot\frac{1}{2}\frac{2\left(x_i-x_{I,i}\right)}{\sqrt{\left(x_l-x_{I,l}\right)\left(x_l-x_{I,l}\right)}}}\notag\\
+    &=&\sqrt{\frac{\left(x_i-x_{I,i}\right)\left(x_i-x_{I,i}\right)}{\left(x_l-x_{I,l}\right)\left(x_l-x_{I,l}\right)}}\notag\\
+    &=&1
+\end{eqnarray}
+上式采用了爱因斯坦求和约定。
+
+在此基础上定义符号距离函数（signed distance function）$\phi(\bm{x})$
+
+% part 3
+\newpage
+\section{VoF方法}
+
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\end{document}
