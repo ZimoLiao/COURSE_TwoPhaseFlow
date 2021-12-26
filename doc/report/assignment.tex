@@ -14,7 +14,7 @@
 
 % global style
 \geometry{b5paper,left=0.6in,right=0.6in,top=1in,bottom=0.8in}
-\linespread{1.2}
+\linespread{1.3}
 \setlength{\parindent}{2em}
 
 \renewcommand{\today}{\small \number\year 年 \number\month 月 \number\day 日}
@@ -37,7 +37,7 @@
     \fancyhf{}
     \fancyhead[L]{\small 廖紫默 (SA21005043)}
     \fancyhead[C]{\small \textbf{多相流大作业}}
-    \fancyhead[R]{\small 封面}
+    \fancyhead[R]{\small 2021年秋}
     \renewcommand{\headrulewidth}{0.4pt}
     \renewcommand{\footrulewidth}{0.4pt}
 }
@@ -85,12 +85,12 @@
 % part 2
 \newpage
 \section{Level Set方法}
-\subsection{基本思想}
+\subsection{基本思想：隐式界面}
 \textbf{ancyhdr} \textit{宏包niubi}\textbf{改善了页眉页脚样式为Arial}的定义方式，允许我们将内容自由安置在页眉和页脚的
 左、中、右三个位置，还为页眉和页脚各加了一条横线。
 fancyhdr 自定义了样式名称 fancy。使用 fancyhdr 宏包定义页眉页脚之前，通常先用  调用这个样式。在 fancyhdr 中定义页眉页脚的命令为
 
-\subsection{符号距离函数}
+\subsection{界面描述：符号距离函数}
 首先我们定义（欧式）距离函数（distance function）：
 \begin{equation}
     d(\bm{x})=\min\left(\left|\bm{x}-\bm{x}_I\right|\right)\quad\text{for all}\quad \bm{x}_I\in\partial\Omega
@@ -104,11 +104,36 @@ fancyhdr 自定义了样式名称 fancy。使用 fancyhdr 宏包定义页眉页�
 \end{eqnarray}
 上式采用了爱因斯坦求和约定。
 
-在此基础上定义符号距离函数（signed distance function）$\phi(\bm{x})$
+在此基础上定义\textbf{符号距离函数（signed distance function）}$\phi(\bm{x})$，使得$|\phi(\bm{x})|=d(\bm{x})$，并要求它满足隐式界面的定义，具体表达式如下：
+\begin{eqnarray}
+    \phi(\bm{x})=\left\{\begin{array}{rl}
+        d(\bm{x})   & \text{for all}\ \bm{x}\in\Omega^+       \\
+        d(\bm{x})=0 & \text{for all}\ \bm{x}\in\partial\Omega \\
+        -d(\bm{x})  & \text{for all}\ \bm{x}\in\Omega^-       \\
+    \end{array}\right.
+    \label{eqn:sdf}
+\end{eqnarray}
+选取符号距离函数作为隐式界面函数具有十分优良的性质，例如其在界面附近的光滑性，及常梯度幅值$\left|\phi(\bm{x})\right|=1$对于界面曲率计算的大大简化：
+\begin{equation}
+    \kappa\equiv\nabla\cdot\bm{n}=\nabla^2\phi,\quad \bm{n}=\nabla\phi
+\end{equation}
+
+\subsection{界面推进}
 
 % part 3
 \newpage
-\section{VoF方法}
+\section{Volume of Fluid方法}
+
+% part 4
+\newpage
+\section{Phase Field方法}
+
+% part 5
+\newpage
+\section{算例验证与分析}
+\subsection{缺角圆盘旋转}
+
+\subsection{液滴在剪切流中变形}
 
 \bibliographystyle{plain}
 \bibliography{ref}
