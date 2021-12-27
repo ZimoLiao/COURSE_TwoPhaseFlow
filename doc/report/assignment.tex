@@ -52,6 +52,22 @@
 }
 \pagestyle{assignment}
 
+% ref style (in chinese)
+\def\equationautorefname{式}%
+\def\footnoteautorefname{脚注}%
+\def\itemautorefname{项}%
+\def\figureautorefname{图}%
+\def\tableautorefname{表}%
+\def\partautorefname{篇}%
+\def\appendixautorefname{附录}%
+\def\chapterautorefname{章}%
+\def\sectionautorefname{节}%
+\def\subsectionautorefname{小小节}%
+\def\subsubsectionautorefname{subsubsection}%
+\def\paragraphautorefname{段落}%
+\def\subparagraphautorefname{子段落}%
+\def\FancyVerbLineautorefname{行}%
+\def\theoremautorefname{定理}%
 
 
 % header
@@ -91,7 +107,7 @@
 fancyhdr 自定义了样式名称 fancy。使用 fancyhdr 宏包定义页眉页脚之前，通常先用  调用这个样式。在 fancyhdr 中定义页眉页脚的命令为
 
 \subsection{界面描述：符号距离函数}
-首先我们定义（欧式）距离函数（distance function）：
+首先我们定义（欧式）\textbf{距离函数（distance function）}：
 \begin{equation}
     d(\bm{x})=\min\left(\left|\bm{x}-\bm{x}_I\right|\right)\quad\text{for all}\quad \bm{x}_I\in\partial\Omega
 \end{equation}
@@ -119,6 +135,38 @@ fancyhdr 自定义了样式名称 fancy。使用 fancyhdr 宏包定义页眉页�
 \end{equation}
 
 \subsection{界面推进}
+自由界面问题中，通常假设两相界面为一物质面，隐式界面函数（这里也就是符号距离函数）$\phi(\bm{x})$的物质导数为零即可得到其演化方程：
+\begin{equation}
+    \frac{\mathrm{D}\phi}{\mathrm{D}t}=\frac{\partial\phi}{\partial t}+\bm{u}\cdot\nabla\phi=0\quad\text{for all }\bm{x}\in\partial\Omega
+    \label{eqn:evolution}
+\end{equation}
+其中$\bm{u}(x,t)$为界面处流场速度，注意该式理论上仅在界面位置（即$\bm{x}_I:\phi(\bm{x}_I)=0$）成立。
+
+\subsubsection{时间推进格式}
+数值求解\autoref{eqn:evolution}时，时间推进的最简单实现莫过于一阶精度的显式格式——\textbf{前向欧拉方法（forward Euler method）}，如下式：
+\begin{equation}
+    \frac{\phi^{n+1}-\phi^n}{\Delta t}+\bm{u}^n\cdot\nabla\phi^n=0
+\end{equation}
+其中上标表所处时间步。
+
+考虑进一步提高时间精度，可以采用\textbf{TVD RK（total variation diminishing Runge-Kutta）格式}，其二阶精度版本等同于常规RK2格式：
+\begin{eqnarray}
+    \frac{\phi^{n+1}-\phi^n}{\Delta t}+\bm{u}^n\cdot\nabla\phi^n=0 \\
+    \frac{\phi^{n+2}-\phi^{n+1}}{\Delta t}+\bm{u}^{n+1}\cdot\nabla\phi^{n+1}=0 \\
+    \phi^{n+1}=\frac{1}{2}\left(\phi^n+\phi^{n+2}\right)
+\end{eqnarray}
+
+三阶精度的TVD RK格式如下：
+\begin{eqnarray}
+    \frac{\phi^{n+1}-\phi^n}{\Delta t}+\bm{u}^n\cdot\nabla\phi^n=0 \\
+    \frac{\phi^{n+2}-\phi^{n+1}}{\Delta t}+\bm{u}^{n+1}\cdot\nabla\phi^{n+1}=0 \\
+    \phi^{n+\frac{1}{2}}=\frac{3}{4}\phi^n+\frac{1}{4}\phi^{n+2} \\
+    \frac{\phi^{n+\frac{3}{2}}-\phi^{n+\frac{1}{2}}}{\Delta t}+\bm{u}^{n+\frac{1}{2}}\cdot\nabla\phi^{n+\frac{1}{2}}=0 \\
+    \phi^{n+1}=\frac{1}{3}\phi^{n+\frac{1}{2}}+\frac{2}{3}\phi^{n+\frac{3}{2}}
+\end{eqnarray}
+更高阶的时间推进格式对于提升界面捕捉的精度收效甚微，上述三种格式对于常规问题已经足够。
+
+\subsubsection{空间离散格式}
 
 % part 3
 \newpage
