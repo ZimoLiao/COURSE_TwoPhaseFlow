@@ -1,17 +1,10 @@
 #include<iostream>
+#include"Matrix.h"
 
-using namespace std;
+//using namespace std;
 
 int main()
 {
-	/* Pre-processing */
-	// Configuration parameters
-	const int nx = 100, ny = 100;
-
-	// Allocation
-	double ux=100
-
-
-
+	Grid u(10, 10, 1), v(10, 10, 1);
 
 }
