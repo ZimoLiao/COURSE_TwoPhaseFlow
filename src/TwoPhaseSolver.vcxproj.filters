@@ -21,9 +21,24 @@
     <ClCompile Include="Grid.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LevelSet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSurf.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GridSurf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

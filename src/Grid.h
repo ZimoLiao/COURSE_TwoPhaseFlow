@@ -24,6 +24,8 @@ public:
 	Grid(size_t nx, size_t ny, size_t nghost);
 	~Grid();
 
+	void Init(size_t nx, size_t ny, size_t nghost);
+
 	double& operator()(int i, int j);
 	void operator=(const Grid& grid);
 	Grid operator+(const Grid& grid);

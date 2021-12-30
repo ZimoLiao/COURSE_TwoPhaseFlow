@@ -6,7 +6,12 @@ Grid::Grid()
 	ny_ = 1;
 	nghost_ = 0;
 
-	data_ = new double[nx_*ny_];
+	data_ = new double[size_t(nx_) * ny_];
+
+	ghost_w_ = new double[1];
+	ghost_e_ = new double[1];
+	ghost_s_ = new double[1];
+	ghost_n_ = new double[1];
 }
 
 Grid::Grid(size_t nx, size_t ny, size_t nghost)
@@ -15,11 +20,11 @@ Grid::Grid(size_t nx, size_t ny, size_t nghost)
 	ny_ = ny;
 	nghost_ = nghost;
 
-	data_ = new double[nx*ny];
-	ghost_w_ = new double[nghost*ny];
-	ghost_e_ = new double[nghost*ny];
-	ghost_s_ = new double[nx*nghost];
-	ghost_n_ = new double[nx*nghost];
+	data_ = new double[nx * ny];
+	ghost_w_ = new double[nghost * ny];
+	ghost_e_ = new double[nghost * ny];
+	ghost_s_ = new double[nx * nghost];
+	ghost_n_ = new double[nx * nghost];
 }
 
 Grid::~Grid()
@@ -31,38 +36,51 @@ Grid::~Grid()
 	delete[] ghost_n_;
 }
 
+void Grid::Init(size_t nx, size_t ny, size_t nghost)
+{
+	nx_ = nx;
+	ny_ = ny;
+	nghost_ = nghost;
+
+	data_ = new double[nx * ny];
+	ghost_w_ = new double[nghost * ny];
+	ghost_e_ = new double[nghost * ny];
+	ghost_s_ = new double[nx * nghost];
+	ghost_n_ = new double[nx * nghost];
+}
+
 // TODO: 越界检查
 // 怎么改成debug和release模式不一样？宏？
-double & Grid::operator()(int i, int j)
+double& Grid::operator()(int i, int j)
 {
 	bool ic = (i >= 0 && i < nx_);
 	bool jc = (j >= 0 && j < ny_);
 
 	if (ic && jc) {
-		return data_[size_t(nx_)*i + j];
+		return data_[size_t(ny_) * i + j];
 	}
 	else if (ic)
 	{
-		bool js = (fabs(-j) <= nghost_);
+		bool js = (j < 0 && fabs(-j) <= nghost_);
 		if (js) {
-			return ghost_s_[size_t(nx_)*i + j + nghost_];
+			return ghost_s_[size_t(nghost_) * i + j + nghost_];
 		}
-		bool jn = (fabs(j - ny_ + 1) <= nghost_);
+		bool jn = (j >= ny_ && fabs(j - ny_ + 1) <= nghost_);
 		if (jn) {
-			return ghost_n_[size_t(nx_)*i + j - ny_];
+			return ghost_n_[size_t(nghost_) * i + j - ny_];
 		}
 
 		cout << "wrong | index out of range\n";
 	}
 	else if (jc)
 	{
-		bool iw = (fabs(-i) <= nghost_);
+		bool iw = (i < 0 && fabs(-i) <= nghost_);
 		if (iw) {
-			return ghost_w_[size_t(nx_)*(i + nghost_) + j];
+			return ghost_w_[size_t(ny_) * (size_t(i) + nghost_) + j];
 		}
-		bool ie = (fabs(i - nx_ + 1) <= nghost_);
+		bool ie = (i >= nx_ && fabs(i - nx_ + 1) <= nghost_);
 		if (ie) {
-			return ghost_e_[size_t(nx_)*(i - nx_) + j];
+			return ghost_e_[size_t(ny_) * (size_t(i) - nx_) + j];
 		}
 
 		cout << "wrong | index out of range\n";
@@ -73,7 +91,7 @@ double & Grid::operator()(int i, int j)
 	}
 }
 
-void Grid::operator=(const Grid & grid)
+void Grid::operator=(const Grid& grid)
 {
 	if (nx_ == grid.nx_ && ny_ == grid.ny_ && nghost_ == grid.nghost_) {
 		for (int i = 0; i != nx_ * ny_; i++) {
@@ -91,26 +109,26 @@ void Grid::operator=(const Grid & grid)
 		}
 	}
 	else {
-		cout << "wrong | size don't match"
+		cout << "wrong | size don't match\n";
 	}
 }
 
-Grid Grid::operator+(const Grid & grid)
+Grid Grid::operator+(const Grid& grid)
 {
 	return Grid();
 }
 
-Grid Grid::operator-(const Grid & grid)
+Grid Grid::operator-(const Grid& grid)
 {
 	return Grid();
 }
 
-Grid Grid::operator*(const Grid & grid)
+Grid Grid::operator*(const Grid& grid)
 {
 	return Grid();
 }
 
-Grid Grid::operator/(const Grid & grid)
+Grid Grid::operator/(const Grid& grid)
 {
 	return Grid();
 }

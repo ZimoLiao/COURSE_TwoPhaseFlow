@@ -139,11 +139,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GridSurf.cpp" />
+    <ClCompile Include="LevelSet.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Grid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="GridSurf.h" />
+    <ClInclude Include="LevelSet.h" />
+    <ClInclude Include="Lib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
