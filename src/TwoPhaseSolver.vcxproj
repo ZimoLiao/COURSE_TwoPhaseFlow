@@ -142,11 +142,13 @@
     <ClInclude Include="Array.h" />
     <ClInclude Include="ArrayCross9.h" />
     <ClInclude Include="ArrayStaggered.h" />
+    <ClInclude Include="LevelSetSolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="ArrayCross9.cpp" />
     <ClCompile Include="ArrayStaggered.cpp" />
+    <ClCompile Include="LevelSetSolver.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

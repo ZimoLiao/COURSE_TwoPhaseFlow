@@ -3,6 +3,7 @@
 
 #include "Array.h"
 
+// 可能实际上不需要
 // Array with "cross-9" computational molecule
 class ArrayCross9 :
 	public Array

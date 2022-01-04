@@ -34,6 +34,7 @@ public:
 	double& operator()(int i, int j);
 
 	void operator=(const Array& a);
+	void operator=(const double& d);
 	void operator+=(const Array& a);
 	void operator+=(const double& d);
 	void operator-=(const Array& a);

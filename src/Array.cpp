@@ -198,8 +198,42 @@ void Array::ExtrapGhost(int order)
 			}
 		}
 		break;
-	case 2:
+	case 0:// direct extrapolation
+		// corners
+		for (int ig = 1; ig <= nghost_; ig++) {
+			ic = nghost_ - ig;
+			jc = nghost_ - ig;
+			data_[sizej_ * ic + jc] = data_[sizej_ * (ic + 1) + (jc + 1)];
 
+			ic = nghost_ - ig;
+			jc = nj_ + nghost_ - 1 + ig;
+			data_[sizej_ * ic + jc] = data_[sizej_ * (ic + 1) + (jc - 1)];
+
+			ic = ni_ + nghost_ - 1 + ig;
+			jc = nghost_ - ig;
+			data_[sizej_ * ic + jc] = data_[sizej_ * (ic - 1) + (jc + 1)];
+
+			ic = ni_ + nghost_ - 1 + ig;
+			jc = nj_ + nghost_ - 1 + ig;
+			data_[sizej_ * ic + jc] = data_[sizej_ * (ic - 1) + (jc - 1)];
+		}
+
+		// sides
+		for (int ig = 1; ig <= nghost_; ig++) {
+			for (int j = nghost_ - ig + 1; j != nj_ + nghost_ + ig - 1; j++) {
+				iw = nghost_ - ig;
+				ie = ni_ + nghost_ - 1 + ig;
+				data_[sizej_ * iw + j] = data_[sizej_ * (iw + 1) + j];
+				data_[sizej_ * ie + j] = data_[sizej_ * (ie - 1) + j];
+
+			}
+			for (int i = nghost_ - ig + 1; i != ni_ + nghost_ + ig - 1; i++) {
+				js = nghost_ - ig;
+				jn = nj_ + nghost_ - 1 + ig;
+				data_[sizej_ * i + js] = data_[sizej_ * i + (js + 1)];
+				data_[sizej_ * i + jn] = data_[sizej_ * i + (jn - 1)];
+			}
+		}
 		break;
 
 	default: // linear extrapolation
@@ -262,6 +296,11 @@ double& Array::operator()(int i, int j)
 void Array::operator=(const Array& a)
 {
 	for (int i = 0; i != size_; i++) { data_[i] = a.data_[i]; }
+}
+
+void Array::operator=(const double& d)
+{
+	for (int i = 0; i != size_; i++) { data_[i] = d; }
 }
 
 void Array::operator+=(const Array& a)
