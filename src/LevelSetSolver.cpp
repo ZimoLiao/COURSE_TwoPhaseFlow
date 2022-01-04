@@ -410,7 +410,7 @@ void LevelSetSolver::InitVelocity(int type_init)
 			}
 		}
 		break;
-	case 3: // rotating (Zalesak)
+	case 3: // rotating
 		for (int i = 0; i != n_; i++) {
 			for (int j = 0; j != n_; j++) {
 				y = (j + 0.5) * h_;
@@ -431,23 +431,146 @@ void LevelSetSolver::InitVelocity(int type_init)
 void LevelSetSolver::InitPhi(int type_init)
 {
 	double x, y;
+	double xc, yc, rc;
+
+	Array in;
+
+	Array Arc;
+	Array LineSeg1;
+	Array LineSeg2;
+	Array Point1;
+	Array Point2;
+	Array Point3;
+	double xp1;
+	double yp1;
+	double xp2;
+	double yp2;
+	double xp3;
+	double yp3;
+
+	double term = 0.0;
+
 	switch (type_init)
 	{
-	case 1:
+	case 1: // assignment 1 (Rider & Kothe variant problem)
+		xc = 0.5;
+		yc = 0.3;
+		rc = 0.2;
+
 		for (int i = -2; i != n_ + 2; i++) {
 			for (int j = -2; j != n_ + 2; j++) {
 				x = (i + 0.5) * h_;
 				y = (j + 0.5) * h_;
-				phin(i, j) = sqrt((x - xc_) * (x - xc_) + (y - yc_) * (y - yc_)) - rc_;
+				phin(i, j) = sqrt((x - xc) * (x - xc) + (y - yc) * (y - yc)) - rc;
 			}
 		}
 		break;
-	default:
+
+
+	case 2: // assignment 2 (Zalesak variant problem)
+		xc = 0.5;
+		yc = 0.5;
+		rc = 0.4;
+
+		in.Init(n_, n_, 2, 1.0);
+
+		Arc.Init(n_, n_, 2, 10.0);
+		LineSeg1.Init(n_, n_, 2, 10.0);
+		LineSeg2.Init(n_, n_, 2, 10.0);
+		Point1.Init(n_, n_, 2, 10.0);
+		Point2.Init(n_, n_, 2, 10.0);
+		Point3.Init(n_, n_, 2, 10.0);
+		xp1 = xc - rc * cos(pi / 6.0);
+		yp1 = yc + rc * sin(pi / 6.0);
+		xp2 = xc;
+		yp2 = yc;
+		xp3 = xc - rc * cos(pi / 6.0);
+		yp3 = yc - rc * sin(pi / 6.0);
+
+		term = 0.0;
 		for (int i = -2; i != n_ + 2; i++) {
 			for (int j = -2; j != n_ + 2; j++) {
 				x = (i + 0.5) * h_;
 				y = (j + 0.5) * h_;
-				phin(i, j) = sqrt((x - xc_) * (x - xc_) + (y - yc_) * (y - yc_)) - rc_;
+
+				Point1(i, j) = sqrt((x - xp1) * (x - xp1) + (y - yp1) * (y - yp1));
+				Point2(i, j) = sqrt((x - xp2) * (x - xp2) + (y - yp2) * (y - yp2));
+				Point3(i, j) = sqrt((x - xp3) * (x - xp3) + (y - yp3) * (y - yp3));
+
+				term = y - x * tan(pi / 3.0);
+				if (term >= yp2 - xp2 * tan(pi / 3.0) && term <= yp1 - xp1 * tan(pi / 3.0)) {
+					term = y + x * tan(pi / 6.0);
+					term -= yp2 + xp2 * tan(pi / 6.0);
+					LineSeg1(i, j) = abs(term * cos(pi / 6.0));
+				}
+
+				term = y + x * tan(pi / 3.0);
+				if (term <= yp2 + xp2 * tan(pi / 3.0) && term >= yp3 + xp3 * tan(pi / 3.0)) {
+					term = y - x * tan(pi / 6.0);
+					term -= yp2 - xp2 * tan(pi / 6.0);
+					LineSeg2(i, j) = abs(term * cos(pi / 6.0));
+				}
+
+				term = (x - xc) / sqrt((x - xc) * (x - xc) + (y - yc) * (y - yc));
+				if (term > cos(pi * 5.0 / 6.0)) {
+					term = sqrt((x - xc) * (x - xc) + (y - yc) * (y - yc));
+					Arc(i, j) = abs(term - rc);
+				}
+			}
+		}
+
+		for (int i = -2; i != n_ + 2; i++) {
+			for (int j = -2; j != n_ + 2; j++) {
+				// distance function
+				phin(i, j) = min(LineSeg1(i, j), LineSeg2(i, j));
+				phin(i, j) = min(phin(i, j), Point1(i, j));
+				phin(i, j) = min(phin(i, j), Point2(i, j));
+				phin(i, j) = min(phin(i, j), Point3(i, j));
+				phin(i, j) = min(phin(i, j), Arc(i, j));
+
+				// sign distance function
+				x = (i + 0.5) * h_;
+				y = (j + 0.5) * h_;
+				term = sqrt((x - xc) * (x - xc) + (y - yc) * (y - yc));
+				if (term < rc) {
+
+					if (y + x * tan(pi / 6.0) > yc + xc * tan(pi / 6.0) || \
+						y - x * tan(pi / 6.0) < yc - xc * tan(pi / 6.0)) {
+						phin(i, j) *= -1.0;
+					}
+
+				}
+			}
+		}
+
+		break;
+
+
+	case 3: // (Rider & Kothe 1995)
+		xc = 0.5;
+		yc = 0.75;
+		rc = 0.15;
+
+		for (int i = -2; i != n_ + 2; i++) {
+			for (int j = -2; j != n_ + 2; j++) {
+				x = (i + 0.5) * h_;
+				y = (j + 0.5) * h_;
+				phin(i, j) = sqrt((x - xc) * (x - xc) + (y - yc) * (y - yc)) - rc;
+			}
+		}
+		break;
+
+
+	default: // assignment 1
+		xc = 0.5;
+		yc = 0.3;
+		rc = 0.2;
+
+		for (int i = -2; i != n_ + 2; i++) {
+			for (int j = -2; j != n_ + 2; j++) {
+				x = (i + 0.5) * h_;
+				y = (j + 0.5) * h_;
+				phin(i, j) = sqrt((x - xc) * (x - xc) + (y - yc) * (y - yc)) - rc;
 			}
 		}
 		break;

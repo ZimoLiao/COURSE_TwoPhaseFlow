@@ -7,17 +7,17 @@ using namespace std;
 
 int main()
 {
-	int n = 256, s = 1, t = 1, r = 2;
+	int n = 256, s = 1, t = 3, r = 0;
 
 	// 固定最大cfl数计算
 	double umax = 2.0 * pi;
-	double cfl = 1.2;
-	double dt = cfl * 1.0 / n / umax, tmax = 0.0;
+	double cfl = 0.8;
+	double dt = cfl * 1.0 / n / umax, tmax = 2.0;
 	int step_r = floor(0.1 / dt);
 
 	LevelSetSolver ls(n, dt, tmax, s, t, r, step_r);
-	ls.InitVelocity(2);
-	ls.InitPhi(1);
+	ls.InitVelocity(3);
+	ls.InitPhi(2);
 
 	ls.Calculation();
 

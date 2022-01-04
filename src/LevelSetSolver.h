@@ -21,12 +21,7 @@ private:
 	double dt_, tmax_;
 	int n_;
 	double l_ = 1.0, h_;
-
 	int step_, stepmax_;
-
-	// geometry initialization
-	double xc_ = 0.5, yc_ = 0.75, rc_ = 0.15;
-
 
 	/* numerical schemes */
 	//	spatial discretization
